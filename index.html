@@ -9,19 +9,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --terracota: #B4664A;
-    --terracota-light: #FAECE7;
-    --terracota-mid: #D4896A;
-    --pizarra: #5C7080;
-    --pizarra-light: #E8EEF4;
-    --crema: #F5EFE6;
-    --crema-dark: #E8DDD0;
-    --rosa: #D4A8A0;
-    --verde: #7A9070;
-    --verde-light: #EEF2EB;
-    --text-dark: #2C1F1A;
-    --text-mid: #6B5248;
-    --text-light: #A08070;
+    --terracota: #3B5233;
+    --terracota-light: #E6EBDF;
+    --terracota-mid: #5A7050;
+    --pizarra: #4F5A44;
+    --pizarra-light: #EDE9DC;
+    --crema: #EDE9DC;
+    --crema-dark: #DBD3C0;
+    --rosa: #A89A82;
+    --verde: #5A7050;
+    --verde-light: #E6EBDF;
+    --text-dark: #0A0A0A;
+    --text-mid: #4A5247;
+    --text-light: #8A8574;
+    --oscuro: #2A3327;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -88,9 +89,9 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(to bottom,
-      rgba(44,31,26,0.3) 0%,
-      rgba(44,31,26,0.1) 40%,
-      rgba(44,31,26,0.5) 100%);
+      rgba(30,36,24,0.3) 0%,
+      rgba(30,36,24,0.1) 40%,
+      rgba(30,36,24,0.5) 100%);
     z-index: 1;
   }
   .hero-content {
@@ -375,7 +376,7 @@
 
   /* ── PROGRAMA ── */
   .programa {
-    background: var(--text-dark);
+    background: var(--oscuro);
     padding: 88px 48px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -431,7 +432,7 @@
   .programa-foto-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(44,31,26,0.6) 0%, transparent 60%);
+    background: linear-gradient(to top, rgba(30,36,24,0.6) 0%, transparent 60%);
   }
   .programa-foto-text {
     position: absolute;
@@ -476,7 +477,7 @@
     display: inline-flex;
     gap: 4px;
     margin-bottom: 32px;
-    background: rgba(92,112,128,0.08);
+    background: rgba(79,90,68,0.08);
     padding: 4px;
     border-radius: 999px;
   }
@@ -756,18 +757,18 @@
   }
 
   /* Colores placeholder fotos */
-  .pc1 { background: #C4866A; }
-  .pc2 { background: #8FA0B0; }
-  .pc3 { background: #C8B090; }
-  .pc4 { background: #7A9080; }
-  .pc5 { background: #B09088; }
-  .pc6 { background: #A0B4C0; }
-  .pc7 { background: #C4A898; }
-  .pc8 { background: #688070; }
+  .pc1 { background: #3B5233; }
+  .pc2 { background: #A89A82; }
+  .pc3 { background: #4F5A44; }
+  .pc4 { background: #C9BEA8; }
+  .pc5 { background: #5A7050; }
+  .pc6 { background: #8A8574; }
+  .pc7 { background: #6B7A5E; }
+  .pc8 { background: #DBD3C0; }
 
   /* ── VESTIMENTA ── */
   .vestimenta {
-    background: var(--text-dark);
+    background: var(--oscuro);
     padding: 88px 48px;
     display: flex;
     flex-direction: column;
@@ -787,7 +788,7 @@
     margin-bottom: 40px;
     padding: 20px 26px;
     border-left: 2px solid var(--terracota-mid);
-    background: rgba(180,102,74,0.10);
+    background: rgba(59,82,51,0.10);
   }
 
   .vest-demo {
@@ -831,7 +832,7 @@
     font-weight: 500;
   }
   .vest-badge.bw { background: rgba(0,0,0,0.55); color: rgba(255,255,255,0.8); }
-  .vest-badge.color { background: rgba(180,102,74,0.85); color: white; }
+  .vest-badge.color { background: rgba(59,82,51,0.85); color: white; }
   .vest-caption {
     position: absolute;
     bottom: 0; left: 0; right: 0;
@@ -907,7 +908,7 @@
     line-height: 1.6;
   }
   .vest-regla.ok { background: rgba(122,144,112,0.15); border-color: rgba(122,144,112,0.25); }
-  .vest-regla.no { background: rgba(180,102,74,0.12); border-color: rgba(180,102,74,0.2); }
+  .vest-regla.no { background: rgba(59,82,51,0.12); border-color: rgba(59,82,51,0.2); }
   .vest-regla.tip { background: rgba(245,239,230,0.05); }
 
   /* ── REGALOS ── */
@@ -939,7 +940,7 @@
     justify-content: space-between;
     gap: 16px;
     background: var(--terracota-light);
-    border: 0.5px solid #F0C0A8;
+    border: 0.5px solid #C9D3BE;
     border-radius: 8px;
     padding: 16px 22px;
     margin-bottom: 36px;
@@ -959,7 +960,7 @@
     letter-spacing: 0.15em; text-decoration: none;
     white-space: nowrap; transition: background 0.2s;
   }
-  .regalos-transfe a:hover { background: #9A5238; }
+  .regalos-transfe a:hover { background: #2C3E26; }
   .regalos-cats {
     display: flex; gap: 8px; flex-wrap: wrap;
     margin-bottom: 24px; justify-content: center;
@@ -993,7 +994,7 @@
   .wish-item:hover {
     border-color: var(--terracota);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(180,102,74,0.1);
+    box-shadow: 0 6px 20px rgba(59,82,51,0.1);
   }
   .wish-foto { height: 140px; overflow: hidden; background: var(--crema); }
   .wish-foto img {
@@ -1031,7 +1032,7 @@
   /* POPUP */
   .wish-popup-overlay {
     position: fixed; inset: 0;
-    background: rgba(44,31,26,0.55);
+    background: rgba(30,36,24,0.55);
     z-index: 500;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
@@ -1044,7 +1045,7 @@
     overflow: hidden;
     transform: translateY(16px) scale(0.97);
     transition: transform 0.25s;
-    box-shadow: 0 24px 60px rgba(44,31,26,0.18);
+    box-shadow: 0 24px 60px rgba(30,36,24,0.18);
     max-height: 90vh; overflow-y: auto;
   }
   .wish-popup-overlay.visible .wish-popup { transform: translateY(0) scale(1); }
@@ -1110,7 +1111,7 @@
     font-family: 'Jost', sans-serif; font-size: 11px; cursor: pointer;
     transition: background 0.2s;
   }
-  .transfe-copiar:hover { background: var(--terracota-dark, #9d5238); }
+  .transfe-copiar:hover { background: var(--terracota-dark, #2C3E26); }
 
   /* Step 3: gracias */
   .popup-gracias {
@@ -1132,7 +1133,7 @@
     border-radius: 4px; cursor: pointer; transition: background 0.2s;
   }
   .wish-popup-btn.primary { background: var(--terracota); color: white; border: none; }
-  .wish-popup-btn.primary:hover { background: #9A5238; }
+  .wish-popup-btn.primary:hover { background: #2C3E26; }
   .wish-popup-btn.secondary { background: transparent; color: var(--text-mid); border: 0.5px solid var(--crema-dark); }
   .wish-popup-btn.secondary:hover { border-color: var(--text-mid); }
 
@@ -1232,7 +1233,7 @@
 
   /* ── FOOTER ── */
   footer {
-    background: var(--text-dark);
+    background: var(--oscuro);
     padding: 48px;
     text-align: center;
   }
