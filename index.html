@@ -72,7 +72,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 60px 40px;
+    padding: 60px 40px 80px;
     position: relative;
     overflow: hidden;
   }
@@ -186,33 +186,45 @@
     margin-top: 6px;
   }
   .hero-scroll {
-    position: absolute;
-    bottom: 36px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    z-index: 5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     opacity: 0;
     animation: fadeUp 1s ease 1.5s forwards;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
   }
   .hero-scroll span {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: rgba(245,239,230,0.35);
+    color: rgba(245,239,230,0.55);
   }
-  .scroll-line {
-    width: 0.5px;
-    height: 32px;
-    background: rgba(245,239,230,0.25);
-    animation: scrollPulse 2s ease-in-out infinite;
+  .scroll-chevrons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
   }
-  @keyframes scrollPulse {
-    0%, 100% { opacity: 0.3; transform: scaleY(1); }
-    50% { opacity: 0.8; transform: scaleY(1.2); }
+  .scroll-chevron {
+    width: 12px;
+    height: 12px;
+    border-right: 1.5px solid rgba(245,239,230,0.7);
+    border-bottom: 1.5px solid rgba(245,239,230,0.7);
+    transform: rotate(45deg);
+    animation: chevronFlow 1.8s ease-in-out infinite;
+  }
+  .scroll-chevron:nth-child(2) { animation-delay: 0.25s; }
+  @keyframes chevronFlow {
+    0%   { opacity: 0; transform: rotate(45deg) translate(-6px, -6px); }
+    45%  { opacity: 1; }
+    100% { opacity: 0; transform: rotate(45deg) translate(6px, 6px); }
   }
 
   /* ── HISTORIA ── */
@@ -1295,9 +1307,47 @@
     .wish-foto { height: 110px; }
     .evento, .hashwall, .rsvp, .regalos, .programa { padding: 64px 20px; }
   }
+  /* ── CURSOR PERSONALIZADO (solo desktop con mouse) ── */
+  @media (pointer: fine) {
+    a, button, .wish-item, .hashwall-foto, .hashwall-tab, .vest-toggle button,
+    .hashwall-ver-todas, .hashwall-subir, .transfe-copiar, .subida-momento,
+    .subida-drop, .regalos-cat-btn, .galeria-cerrar, .wish-popup-close,
+    .wish-popup-back { cursor: none; }
+
+    #cursor-ring {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1px solid var(--terracota);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease, border-color 0.25s ease;
+      opacity: 0;
+    }
+    #cursor-dot {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--terracota);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.25s ease, background 0.25s ease;
+      opacity: 0;
+    }
+    body.cursor-ready #cursor-ring, body.cursor-ready #cursor-dot { opacity: 1; }
+    #cursor-ring.hover {
+      width: 48px; height: 48px;
+      border-color: var(--crema);
+      background: rgba(59,82,51,0.15);
+    }
+    body.cursor-dark #cursor-ring { border-color: var(--crema); }
+    body.cursor-dark #cursor-dot { background: var(--crema); }
+  }
+
 </style>
 </head>
 <body>
+
+<div id="cursor-ring"></div>
+<div id="cursor-dot"></div>
 
 <!-- NAV -->
 <nav>
@@ -1343,8 +1393,11 @@
     </div>
   </div>
   <div class="hero-scroll">
-    <span>scrollear</span>
-    <div class="scroll-line"></div>
+    <span>scrolleá</span>
+    <div class="scroll-chevrons">
+      <div class="scroll-chevron"></div>
+      <div class="scroll-chevron"></div>
+    </div>
   </div>
 </section>
 
@@ -2479,6 +2532,51 @@
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+
+  // ── Cursor personalizado (solo desktop con mouse) ──
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const ring = document.getElementById('cursor-ring');
+    const dot = document.getElementById('cursor-dot');
+    let ringX = 0, ringY = 0, targetX = 0, targetY = 0;
+
+    window.addEventListener('mousemove', e => {
+      targetX = e.clientX; targetY = e.clientY;
+      dot.style.left = targetX + 'px';
+      dot.style.top = targetY + 'px';
+      document.body.classList.add('cursor-ready');
+
+      // Si el mouse está sobre una sección de fondo oscuro, el cursor cambia a claro
+      const el = document.elementFromPoint(targetX, targetY);
+      const darkSection = el && el.closest('.vestimenta, .programa, footer, .galeria-overlay, .subida-overlay, #panel-overlay');
+      document.body.classList.toggle('cursor-dark', !!darkSection);
+    });
+
+    function animateRing() {
+      ringX += (targetX - ringX) * 0.18;
+      ringY += (targetY - ringY) * 0.18;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    const hoverables = 'a, button, .wish-item, .hashwall-foto, .hashwall-tab, .vest-toggle button, .hashwall-ver-todas, .hashwall-subir, .transfe-copiar, .subida-momento, .subida-drop, .regalos-cat-btn';
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest(hoverables)) ring.classList.add('hover');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest(hoverables)) ring.classList.remove('hover');
+    });
+  }
+
+  // ── "Scrollear" del hero: aparece al cargar, desaparece al primer scroll ──
+  const heroScroll = document.querySelector('.hero-scroll');
+  if (heroScroll) {
+    window.addEventListener('scroll', () => {
+      heroScroll.style.opacity = window.scrollY > 40 ? '0' : '';
+      heroScroll.style.pointerEvents = window.scrollY > 40 ? 'none' : '';
+    }, { passive: true });
+  }
 </script>
 
 </body>
