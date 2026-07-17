@@ -274,7 +274,10 @@
     margin-top: 40px;
     padding-top: 32px;
     border-top: 0.5px solid var(--crema-dark);
+    justify-content: center;
+    text-align: center;
   }
+  .historia-stats > div { flex: 1; }
   .hstat-num {
     font-family: 'Cormorant Garamond', serif;
     font-size: 40px;
@@ -1047,7 +1050,26 @@
     transition: transform 0.25s;
     box-shadow: 0 24px 60px rgba(30,36,24,0.18);
     max-height: 90vh; overflow-y: auto;
+    position: relative;
   }
+  .wish-popup-close {
+    position: absolute; top: 12px; right: 12px; z-index: 5;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); border: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; line-height: 1; color: var(--text-dark);
+    cursor: pointer; transition: background 0.2s;
+  }
+  .wish-popup-close:hover { background: white; }
+  .wish-popup-back {
+    position: absolute; top: 12px; left: 12px; z-index: 5;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); border: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; line-height: 1; color: var(--text-dark);
+    cursor: pointer; transition: background 0.2s;
+  }
+  .wish-popup-back:hover { background: white; }
   .wish-popup-overlay.visible .wish-popup { transform: translateY(0) scale(1); }
   .wish-popup-foto { height: 200px; overflow: hidden; flex-shrink: 0; }
   .wish-popup-foto img { width: 100%; height: 100%; object-fit: cover; }
@@ -1269,6 +1291,8 @@
     .evento-header { grid-template-columns: 1fr; }
     .evento-grid { grid-template-columns: 1fr; }
     .hashwall-grid { grid-template-columns: repeat(2, 1fr); }
+    .wish-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .wish-foto { height: 110px; }
     .evento, .hashwall, .rsvp, .regalos, .programa { padding: 64px 20px; }
   }
 </style>
@@ -1366,7 +1390,7 @@
   <h2 class="section-title">Todo lo que necesitás saber</h2>
   <div class="evento-header">
     <div>
-      <p class="section-body">La quinta de Azul y Tefi en Tandil. El lugar donde todo va a pasar — rodeadas de los que más quieren.</p>
+      <p class="section-body">La quinta de Azul y Tefi en Tandil. El lugar donde todo va a pasar — rodeadas de las personas que más quieren.</p>
       <p class="section-body" style="margin-top:12px;">
         <a href="https://maps.app.goo.gl/BxeRsMWX21UJBKVP9" target="_blank" style="color:var(--terracota);font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
           📍 Cómo llegar → Google Maps
@@ -1597,6 +1621,8 @@
 <!-- POPUP REGALO -->
 <div class="wish-popup-overlay" id="wish-overlay" onclick="cerrarPopup(event)">
   <div class="wish-popup" id="wish-popup">
+    <button class="wish-popup-close" onclick="cerrarPopup()">&times;</button>
+    <button class="wish-popup-back" id="popup-back" onclick="volverStep1()" style="display:none;">&larr;</button>
     <div class="wish-popup-foto"><img id="popup-img" src="" alt=""></div>
     <div class="wish-popup-body">
       <p class="wish-popup-cat" id="popup-cat"></p>
@@ -1619,7 +1645,6 @@
       <div class="popup-step active" id="step-1">
         <div class="wish-popup-actions">
           <button class="wish-popup-btn primary" onclick="irStep2()">Quiero sumar a esto</button>
-          <button class="wish-popup-btn secondary" onclick="cerrarPopup()">Cerrar</button>
         </div>
       </div>
 
@@ -1644,7 +1669,6 @@
         </div>
         <div class="wish-popup-actions" style="margin-top:16px;">
           <button class="wish-popup-btn primary" onclick="confirmarRegalo()">Ya transferí</button>
-          <button class="wish-popup-btn secondary" onclick="volverStep1()">Volver</button>
         </div>
       </div>
 
@@ -1738,7 +1762,7 @@
         data-img="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80"
         data-nombre="Cafetera italiana de diseño"
         data-desc="Para los desayunos que se van a tomar juntas cada mañana. Un clásico que dura para siempre."
-        data-contrib="3" data-precio="$100.000"
+        data-contrib="3" data-precio="$75.000"
         onclick="abrirPopup(this)">
         <div class="wish-foto"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70" alt="Cafetera"></div>
         <div class="wish-info">
@@ -1752,19 +1776,19 @@
           
           <div class="wish-precio-inline">
             <span class="wish-precio-label">Aporte sugerido</span>
-            <span class="wish-precio-valor">$100.000</span>
+            <span class="wish-precio-valor">$75.000</span>
           </div>
           <span class="wish-cta">Sumar a esto →</span>
         </div>
       </div>
 
       <div class="wish-item" data-cat="cocina"
-        data-img="https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=700&q=80"
+        data-img="https://images.unsplash.com/photo-1577930143935-a9489e4f34ec?w=700&q=80"
         data-nombre="Vajilla artesanal completa"
         data-desc="Platos, tazas y bowls de cerámica hecha a mano. Para las mesas que van a compartir con los que quieren."
         data-contrib="7" data-precio="$120.000"
         onclick="abrirPopup(this)">
-        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=400&q=70" alt="Vajilla"></div>
+        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1577930143935-a9489e4f34ec?w=400&q=70" alt="Vajilla"></div>
         <div class="wish-info">
           <p class="wish-cat">Cocina</p>
           <p class="wish-nombre">Vajilla artesanal completa</p>
@@ -1786,7 +1810,7 @@
         data-img="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=700&q=80"
         data-nombre="Set de tablas de madera"
         data-desc="Para las picadas que van a armar con amigos. De madera noble, para durar toda la vida."
-        data-contrib="1" data-precio="$100.000"
+        data-contrib="1" data-precio="$70.000"
         onclick="abrirPopup(this)">
         <div class="wish-foto"><img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=400&q=70" alt="Tabla madera"></div>
         <div class="wish-info">
@@ -1800,7 +1824,7 @@
           
           <div class="wish-precio-inline">
             <span class="wish-precio-label">Aporte sugerido</span>
-            <span class="wish-precio-valor">$100.000</span>
+            <span class="wish-precio-valor">$70.000</span>
           </div>
           <span class="wish-cta">Sumar a esto →</span>
         </div>
@@ -1810,7 +1834,7 @@
         data-img="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&q=80"
         data-nombre="Sillón esquinero"
         data-desc="El centro del living donde van a pasar las noches de películas. El lugar donde todo va a pasar."
-        data-contrib="5" data-precio="$200.000"
+        data-contrib="5" data-precio="$250.000"
         onclick="abrirPopup(this)">
         <div class="wish-foto"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=70" alt="Sillón"></div>
         <div class="wish-info">
@@ -1824,7 +1848,7 @@
           
           <div class="wish-precio-inline">
             <span class="wish-precio-label">Aporte sugerido</span>
-            <span class="wish-precio-valor">$200.000</span>
+            <span class="wish-precio-valor">$250.000</span>
           </div>
           <span class="wish-cta">Sumar a esto →</span>
         </div>
@@ -1858,7 +1882,7 @@
         data-img="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=700&q=80"
         data-nombre="Ropa de cama de lino"
         data-desc="Sábanas y fundas en lino natural, suaves y durables. Para despertar bien cada mañana."
-        data-contrib="2" data-precio="$110.000"
+        data-contrib="2" data-precio="$150.000"
         onclick="abrirPopup(this)">
         <div class="wish-foto"><img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=70" alt="Ropa de cama"></div>
         <div class="wish-info">
@@ -1872,19 +1896,19 @@
           
           <div class="wish-precio-inline">
             <span class="wish-precio-label">Aporte sugerido</span>
-            <span class="wish-precio-valor">$110.000</span>
+            <span class="wish-precio-valor">$150.000</span>
           </div>
           <span class="wish-cta">Sumar a esto →</span>
         </div>
       </div>
 
       <div class="wish-item" data-cat="dormitorio"
-        data-img="https://images.unsplash.com/photo-1531836985689-7a40c49b5e8a?w=700&q=80"
+        data-img="https://images.unsplash.com/photo-1614635884840-85cf80d23844?w=700&q=80"
         data-nombre="Lámparas de mesa"
         data-desc="Una a cada lado de la cama, de cerámica artesanal. Ya fue completado gracias a los que sumaron."
         data-contrib="6" data-precio="$100.000"
         onclick="abrirPopup(this)">
-        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1531836985689-7a40c49b5e8a?w=400&q=70" alt="Lámpara"></div>
+        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1614635884840-85cf80d23844?w=400&q=70" alt="Lámpara"></div>
         <div class="wish-info">
           <p class="wish-cat">Dormitorio</p>
           <p class="wish-nombre">Lámparas de mesa</p>
@@ -1927,12 +1951,12 @@
       </div>
 
       <div class="wish-item" data-cat="exterior"
-        data-img="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80"
+        data-img="https://images.unsplash.com/photo-1633309343061-29cdc618d5e9?w=700&q=80"
         data-nombre="Parrilla"
         data-desc="Porque hay un asado con amigos esperando en el horizonte. El regalo más campestre de la lista."
         data-contrib="2" data-precio="$250.000"
         onclick="abrirPopup(this)">
-        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=70" alt="Parrilla"></div>
+        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1633309343061-29cdc618d5e9?w=400&q=70" alt="Parrilla"></div>
         <div class="wish-info">
           <p class="wish-cat">Exterior</p>
           <p class="wish-nombre">Parrilla</p>
@@ -2343,6 +2367,8 @@
     document.querySelectorAll('.popup-step').forEach((s, i) => {
       s.classList.toggle('active', i + 1 === n);
     });
+    const back = document.getElementById('popup-back');
+    if (back) back.style.display = (n === 2) ? 'flex' : 'none';
   }
   function irStep2() { irStep(2); }
   function volverStep1() {
