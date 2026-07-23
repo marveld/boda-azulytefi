@@ -770,6 +770,56 @@
     border-radius: 8px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   }
+  .lightbox-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 310;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(255,255,255,0.22); }
+  .lightbox-nav.prev { left: 20px; }
+  .lightbox-nav.next { right: 20px; }
+  .lightbox-cerrar {
+    position: fixed;
+    top: 20px; right: 20px;
+    z-index: 310;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: white;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .lightbox-cerrar:hover { background: rgba(255,255,255,0.22); }
+  .lightbox-contador {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 310;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  @media (max-width: 640px) {
+    .lightbox-nav { width: 38px; height: 38px; font-size: 17px; }
+    .lightbox-nav.prev { left: 8px; }
+    .lightbox-nav.next { right: 8px; }
+  }
 
   /* Colores placeholder fotos */
   .pc1 { background: #3B5233; }
@@ -1126,6 +1176,13 @@
 
   /* Datos de transferencia en popup */
   .transfe-datos { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .transfe-persona-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-mid); margin: 0 0 2px;
+  }
+  .transfe-nota {
+    font-size: 12px; color: var(--text-light); margin-top: 12px; line-height: 1.6;
+  }
   .transfe-dato {
     display: flex; align-items: center; gap: 10px;
     background: var(--crema); border-radius: 6px;
@@ -1649,8 +1706,12 @@
 </div>
 
 <!-- LIGHTBOX FOTO GRANDE -->
-<div class="lightbox-overlay" id="lightbox-overlay" onclick="cerrarLightbox()">
+<div class="lightbox-overlay" id="lightbox-overlay" onclick="if(event.target===this) cerrarLightbox()">
+  <button class="lightbox-cerrar" onclick="cerrarLightbox()">&times;</button>
+  <button class="lightbox-nav prev" onclick="lightboxNav(-1)">&larr;</button>
   <img id="lightbox-img" src="" alt="Foto de la boda">
+  <button class="lightbox-nav next" onclick="lightboxNav(1)">&rarr;</button>
+  <span class="lightbox-contador" id="lightbox-contador"></span>
 </div>
 
 <!-- PANEL DE MODERACIÓN (privado — se abre con el link secreto) -->
@@ -1705,21 +1766,31 @@
       <div class="popup-step" id="step-2">
         <p class="wish-popup-form-label">Estos son los datos para transferir tu aporte a este regalo:</p>
         <div class="transfe-datos">
+          <p class="transfe-persona-label">Azu</p>
           <div class="transfe-dato">
             <span class="transfe-dato-label">Alias</span>
-            <span class="transfe-dato-valor" id="dato-alias-1"></span>
-            <button class="transfe-copiar" onclick="copiarDato('dato-alias-1', this)">Copiar</button>
+            <span class="transfe-dato-valor" id="dato-alias-azu-1"></span>
+            <button class="transfe-copiar" onclick="copiarDato('dato-alias-azu-1', this)">Copiar</button>
           </div>
           <div class="transfe-dato">
             <span class="transfe-dato-label">CBU</span>
-            <span class="transfe-dato-valor" id="dato-cbu-1"></span>
-            <button class="transfe-copiar" onclick="copiarDato('dato-cbu-1', this)">Copiar</button>
+            <span class="transfe-dato-valor" id="dato-cbu-azu-1"></span>
+            <button class="transfe-copiar" onclick="copiarDato('dato-cbu-azu-1', this)">Copiar</button>
+          </div>
+
+          <p class="transfe-persona-label" style="margin-top:14px;">Tefi</p>
+          <div class="transfe-dato">
+            <span class="transfe-dato-label">Alias</span>
+            <span class="transfe-dato-valor" id="dato-alias-tefi-1"></span>
+            <button class="transfe-copiar" onclick="copiarDato('dato-alias-tefi-1', this)">Copiar</button>
           </div>
           <div class="transfe-dato">
-            <span class="transfe-dato-label">Titular</span>
-            <span class="transfe-dato-valor" id="dato-titular-1"></span>
+            <span class="transfe-dato-label">CBU</span>
+            <span class="transfe-dato-valor" id="dato-cbu-tefi-1"></span>
+            <button class="transfe-copiar" onclick="copiarDato('dato-cbu-tefi-1', this)">Copiar</button>
           </div>
         </div>
+        <p class="transfe-nota">Podés transferirle a cualquiera de las dos, ¡como te resulte más fácil!</p>
         <div class="wish-popup-actions" style="margin-top:16px;">
           <button class="wish-popup-btn primary" onclick="confirmarRegalo()">Ya transferí</button>
         </div>
@@ -1751,21 +1822,31 @@
       <div id="transfe-step-1">
         <p class="wish-popup-form-label">Estos son los datos para transferir tu aporte:</p>
         <div class="transfe-datos">
+          <p class="transfe-persona-label">Azu</p>
           <div class="transfe-dato">
             <span class="transfe-dato-label">Alias</span>
-            <span class="transfe-dato-valor" id="dato-alias-2"></span>
-            <button class="transfe-copiar" onclick="copiarDato('dato-alias-2', this)">Copiar</button>
+            <span class="transfe-dato-valor" id="dato-alias-azu-2"></span>
+            <button class="transfe-copiar" onclick="copiarDato('dato-alias-azu-2', this)">Copiar</button>
           </div>
           <div class="transfe-dato">
             <span class="transfe-dato-label">CBU</span>
-            <span class="transfe-dato-valor" id="dato-cbu-2"></span>
-            <button class="transfe-copiar" onclick="copiarDato('dato-cbu-2', this)">Copiar</button>
+            <span class="transfe-dato-valor" id="dato-cbu-azu-2"></span>
+            <button class="transfe-copiar" onclick="copiarDato('dato-cbu-azu-2', this)">Copiar</button>
+          </div>
+
+          <p class="transfe-persona-label" style="margin-top:14px;">Tefi</p>
+          <div class="transfe-dato">
+            <span class="transfe-dato-label">Alias</span>
+            <span class="transfe-dato-valor" id="dato-alias-tefi-2"></span>
+            <button class="transfe-copiar" onclick="copiarDato('dato-alias-tefi-2', this)">Copiar</button>
           </div>
           <div class="transfe-dato">
-            <span class="transfe-dato-label">Titular</span>
-            <span class="transfe-dato-valor" id="dato-titular-2"></span>
+            <span class="transfe-dato-label">CBU</span>
+            <span class="transfe-dato-valor" id="dato-cbu-tefi-2"></span>
+            <button class="transfe-copiar" onclick="copiarDato('dato-cbu-tefi-2', this)">Copiar</button>
           </div>
         </div>
+        <p class="transfe-nota">Podés transferirle a cualquiera de las dos, ¡como te resulte más fácil!</p>
         <div class="wish-popup-actions" style="margin-top:16px;">
           <button class="wish-popup-btn primary" onclick="confirmarTransfe()">Ya transferí</button>
           <button class="wish-popup-btn secondary" onclick="cerrarPopupTransfe()">Cerrar</button>
@@ -1908,12 +1989,12 @@
       </div>
 
       <div class="wish-item" data-cat="living"
-        data-img="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=700&q=80"
+        data-img="https://images.unsplash.com/photo-1614635884840-85cf80d23844?w=700&q=80"
         data-nombre="Plantas y macetas de diseño"
         data-desc="Para llenar la casa de verde, como les gusta. Un regalo que crece con ellas."
         data-contrib="4" data-precio="$100.000"
         onclick="abrirPopup(this)">
-        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=70" alt="Plantas"></div>
+        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1614635884840-85cf80d23844?w=400&q=70" alt="Plantas"></div>
         <div class="wish-info">
           <p class="wish-cat">Living</p>
           <p class="wish-nombre">Plantas y macetas de diseño</p>
@@ -1956,12 +2037,12 @@
       </div>
 
       <div class="wish-item" data-cat="dormitorio"
-        data-img="https://images.unsplash.com/photo-1614635884840-85cf80d23844?w=700&q=80"
+        data-img="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=700&q=80"
         data-nombre="Lámparas de mesa"
         data-desc="Una a cada lado de la cama, de cerámica artesanal. Ya fue completado gracias a los que sumaron."
         data-contrib="6" data-precio="$100.000"
         onclick="abrirPopup(this)">
-        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1614635884840-85cf80d23844?w=400&q=70" alt="Lámpara"></div>
+        <div class="wish-foto"><img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=70" alt="Lámpara"></div>
         <div class="wish-info">
           <p class="wish-cat">Dormitorio</p>
           <p class="wish-nombre">Lámparas de mesa</p>
@@ -2175,14 +2256,55 @@
     return fotosAprobadas[momento];
   }
 
-  // ── Lightbox: ver una foto en grande ──
+  // ── Lightbox: ver foto en grande, con navegación entre las del mismo set ──
+  let lightboxFotos = [];
+  let lightboxIndex = 0;
+
   function abrirLightbox(url) {
-    document.getElementById('lightbox-img').src = miniatura(url, 1400);
+    lightboxFotos = fotosDe(momentoActual);
+    lightboxIndex = lightboxFotos.indexOf(url);
+    if (lightboxIndex < 0) { lightboxFotos = [url]; lightboxIndex = 0; }
+    mostrarLightbox();
     document.getElementById('lightbox-overlay').classList.add('visible');
+  }
+  function mostrarLightbox() {
+    document.getElementById('lightbox-img').src = miniatura(lightboxFotos[lightboxIndex], 1400);
+    const contador = document.getElementById('lightbox-contador');
+    const nav = document.querySelectorAll('.lightbox-nav');
+    if (lightboxFotos.length > 1) {
+      contador.textContent = (lightboxIndex + 1) + ' / ' + lightboxFotos.length;
+      contador.style.display = '';
+      nav.forEach(b => b.style.display = '');
+    } else {
+      contador.style.display = 'none';
+      nav.forEach(b => b.style.display = 'none');
+    }
+  }
+  function lightboxNav(dir) {
+    lightboxIndex = (lightboxIndex + dir + lightboxFotos.length) % lightboxFotos.length;
+    mostrarLightbox();
   }
   function cerrarLightbox() {
     document.getElementById('lightbox-overlay').classList.remove('visible');
   }
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox-overlay').classList.contains('visible')) return;
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+    if (e.key === 'Escape') cerrarLightbox();
+  });
+  // Swipe en mobile
+  (function() {
+    let touchX = null;
+    const overlay = document.getElementById('lightbox-overlay');
+    overlay.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+    overlay.addEventListener('touchend', e => {
+      if (touchX === null) return;
+      const delta = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(delta) > 40) lightboxNav(delta > 0 ? -1 : 1);
+      touchX = null;
+    });
+  })();
 
   // Miniatura liviana de Cloudinary (ahorra datos del plan gratis)
   function miniatura(url, ancho) {
@@ -2407,9 +2529,10 @@
       : contrib + ' persona' + (contrib > 1 ? 's ya sumaron' : ' ya sumó');
 
     // Cargar datos de transferencia en el popup
-    document.getElementById('dato-alias-1').textContent = TRANSFE.alias;
-    document.getElementById('dato-cbu-1').textContent = TRANSFE.cbu;
-    document.getElementById('dato-titular-1').textContent = TRANSFE.titular;
+    document.getElementById('dato-alias-azu-1').textContent = TRANSFE_AZU.alias;
+    document.getElementById('dato-cbu-azu-1').textContent = TRANSFE_AZU.cbu;
+    document.getElementById('dato-alias-tefi-1').textContent = TRANSFE_TEFI.alias;
+    document.getElementById('dato-cbu-tefi-1').textContent = TRANSFE_TEFI.cbu;
 
     irStep(1);
     document.getElementById('wish-overlay').classList.add('visible');
@@ -2428,11 +2551,16 @@
     irStep(1);
   }
 
-  // ── DATOS DE TRANSFERENCIA (ficticios para prueba) ──
-  const TRANSFE = {
-    cbu:     '0000003100012345678901',
-    alias:   'azulytefi.casa',
-    titular: 'Azul García / Stefanía López'
+  // ── DATOS DE TRANSFERENCIA (reales) ──
+  const TRANSFE_AZU = {
+    cbu:     '0000003100043122878504',
+    alias:   'azulverzura',
+    titular: 'Azul'
+  };
+  const TRANSFE_TEFI = {
+    cbu:     '0720114788000037289340',
+    alias:   'estefania.salum.1996',
+    titular: 'Tefi'
   };
 
   function confirmarRegalo() {
@@ -2500,9 +2628,10 @@
 
   // ── Popup transferencia directa ──
   function abrirPopupTransfe() {
-    document.getElementById('dato-alias-2').textContent = TRANSFE.alias;
-    document.getElementById('dato-cbu-2').textContent = TRANSFE.cbu;
-    document.getElementById('dato-titular-2').textContent = TRANSFE.titular;
+    document.getElementById('dato-alias-azu-2').textContent = TRANSFE_AZU.alias;
+    document.getElementById('dato-cbu-azu-2').textContent = TRANSFE_AZU.cbu;
+    document.getElementById('dato-alias-tefi-2').textContent = TRANSFE_TEFI.alias;
+    document.getElementById('dato-cbu-tefi-2').textContent = TRANSFE_TEFI.cbu;
     document.getElementById('transfe-step-1').style.display = 'block';
     document.getElementById('transfe-step-2').style.display = 'none';
     document.getElementById('transfe-overlay').classList.add('visible');
