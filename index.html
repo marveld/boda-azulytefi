@@ -1634,8 +1634,7 @@
     </div>
   </div>
   <div class="programa-foto">
-    <!-- Reemplazar con foto del lugar / la quinta en Tandil -->
-    <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=80" alt="El lugar">
+    <img src="https://res.cloudinary.com/tdfbxqx0/image/upload/w_1000,q_auto,f_auto/v1788787315/fluir_dia_grk0id.jpg" alt="El lugar">
     <div class="programa-foto-overlay"></div>
     <div class="programa-foto-text">
       <p>"El lugar donde todo va a empezar"</p>
@@ -2035,16 +2034,8 @@
 <section class="rsvp" id="rsvp">
   <p class="section-label">Confirmá tu asistencia</p>
   <h2 class="section-title">¿Venís?</h2>
-  <p class="rsvp-sub">Necesitamos saberlo antes del <!-- fecha límite --> para poder organizarnos bien.</p>
-  <form class="rsvp-form" onsubmit="handleRsvp(event)">
-    <input class="rsvp-input" type="text" id="rsvp-nombre" placeholder="Tu nombre completo" required>
-    <div class="rsvp-row">
-      <input class="rsvp-input" type="text" id="rsvp-acompanante" placeholder="¿Venís con acompañante?">
-      <input class="rsvp-input" type="text" id="rsvp-menu" placeholder="Menú especial">
-    </div>
-    <input class="rsvp-input" type="text" id="rsvp-cancion" placeholder="Canción que no puede faltar 🎵">
-    <button class="rsvp-btn" type="submit">Confirmar asistencia</button>
-  </form>
+  <p class="rsvp-sub">Necesitamos saberlo antes del 9 de noviembre para organizarnos bien.</p>
+  <a class="rsvp-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeICFf_BtA7IlXu9jLHA4_Or4ylnfHodRDtRFy5EnTOGHcNcA/viewform?usp=header" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none; text-align:center;">Confirmar asistencia</a>
 </section>
 
 <!-- FOOTER -->
@@ -2111,30 +2102,6 @@
   }
   cargarContribuciones();
   cargarFotos();
-
-  function handleRsvp(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('.rsvp-btn');
-    btn.textContent = 'Enviando…';
-    btn.disabled = true;
-
-    guardarEnSheets({
-      tipo: 'rsvp',
-      nombre:      document.getElementById('rsvp-nombre').value.trim(),
-      acompanante: document.getElementById('rsvp-acompanante').value.trim(),
-      menu:        document.getElementById('rsvp-menu').value.trim(),
-      cancion:     document.getElementById('rsvp-cancion').value.trim()
-    }).then(ok => {
-      if (ok) {
-        btn.textContent = '¡Confirmado! Nos vemos pronto ✓';
-        btn.style.background = '#d4f0e0';
-        btn.style.color = '#1a6640';
-      } else {
-        btn.textContent = 'Hubo un error — intentá de nuevo';
-        btn.disabled = false;
-      }
-    });
-  }
 
   // Vestimenta toggle B&W / color
   function setVestimenta(mode) {
