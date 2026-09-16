@@ -490,17 +490,23 @@
   /* Pestañas de momentos */
   .hashwall-tabs {
     display: inline-flex;
-    gap: 4px;
+    gap: 28px;
     margin-bottom: 32px;
-    background: rgba(79,90,68,0.08);
-    padding: 4px;
-    border-radius: 999px;
+    border-bottom: 1px solid rgba(79,90,68,0.15);
+    padding-bottom: 0;
+  }
+  .hashwall-filtro-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-light);
+    margin: 8px 0 10px;
   }
   .hashwall-tab {
     border: none;
+    border-bottom: 2px solid transparent;
     background: transparent;
-    padding: 9px 22px;
-    border-radius: 999px;
+    padding: 0 0 10px;
     font-family: 'Jost', sans-serif;
     font-size: 12px;
     text-transform: uppercase;
@@ -508,10 +514,13 @@
     color: var(--text-light);
     cursor: pointer;
     transition: all 0.25s;
+    margin-bottom: -1px;
   }
+  .hashwall-tab:hover { color: var(--pizarra); }
   .hashwall-tab.active {
-    background: var(--pizarra);
-    color: white;
+    color: var(--pizarra);
+    border-bottom-color: var(--pizarra);
+    font-weight: 500;
   }
   .hashwall-grid {
     display: grid;
@@ -550,7 +559,7 @@
     border: 0.5px solid var(--pizarra);
     color: var(--pizarra);
     padding: 12px 28px;
-    border-radius: 999px;
+    border-radius: 8px;
     font-family: 'Jost', sans-serif;
     font-size: 13px;
     letter-spacing: 0.04em;
@@ -564,6 +573,18 @@
     text-transform: uppercase;
     letter-spacing: 0.18em;
     color: var(--text-light);
+    margin-bottom: 40px;
+  }
+  .hashwall-hashtag-nota {
+    font-size: 12px;
+    color: var(--text-light);
+    max-width: 420px;
+    margin: 14px auto 0;
+    line-height: 1.6;
+  }
+  .hashwall-hashtag-nota strong {
+    color: var(--pizarra);
+    font-weight: 500;
   }
 
   /* Modal galería / carrusel */
@@ -626,7 +647,7 @@
     color: white;
     border: 0.5px solid var(--pizarra);
     padding: 12px 28px;
-    border-radius: 999px;
+    border-radius: 8px;
     font-family: 'Jost', sans-serif;
     font-size: 13px;
     letter-spacing: 0.04em;
@@ -1645,9 +1666,16 @@
 <!-- HASHTAG WALL -->
 <section class="hashwall" id="hashtag">
   <p class="section-label" style="color:var(--pizarra);">Compartí el momento</p>
-  <h2 class="hashwall-titulo">#AzulYTefi26</h2>
-  <p class="hashwall-sub">De la previa, la fiesta y lo que venga después: subí tus fotos y sumalas a nuestro álbum. Aparecen acá una vez que las aprobamos.</p>
+  <h2 class="hashwall-titulo">Sumá tus fotos</h2>
+  <p class="hashwall-sub">De la previa, la fiesta y lo que venga después. Subilas con el botón de abajo y aparecen acá una vez que las aprobamos.</p>
 
+  <div class="hashwall-acciones">
+    <button class="hashwall-subir" onclick="abrirSubida()">Subir mi foto</button>
+    <button class="hashwall-ver-todas" onclick="abrirGaleria()">Ver todas las fotos →</button>
+  </div>
+  <p class="hashwall-cta">Tu foto aparece acá una vez que la aprobamos</p>
+
+  <p class="hashwall-filtro-label">Filtrar por momento</p>
   <div class="hashwall-tabs">
     <button class="hashwall-tab active" onclick="cambiarMomento('todas', this)">Todas</button>
     <button class="hashwall-tab" onclick="cambiarMomento('previa', this)">Previa</button>
@@ -1667,11 +1695,7 @@
     <div class="hashwall-placeholder pc8"></div>
   </div>
 
-  <div class="hashwall-acciones">
-    <button class="hashwall-subir" onclick="abrirSubida()">Subir mi foto</button>
-    <button class="hashwall-ver-todas" onclick="abrirGaleria()">Ver todas las fotos →</button>
-  </div>
-  <p class="hashwall-cta">Tu foto aparece una vez que la aprobamos</p>
+  <p class="hashwall-hashtag-nota">También podés usar <strong>#AzulYTefi26</strong> en tus redes — es solo para encontrarnos ahí, no sube la foto acá. Para que aparezca en este álbum, subila con el botón de arriba.</p>
 </section>
 
 <!-- MODAL SUBIR FOTO -->
