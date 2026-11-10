@@ -551,6 +551,21 @@
     aspect-ratio: 1;
     border-radius: 6px;
   }
+  /* Celda "+N fotos más" */
+  .hashwall-mas img { filter: brightness(0.45) saturate(0.7) blur(1px) !important; }
+  .hashwall-mas:hover img { filter: brightness(0.35) saturate(0.7) blur(1px) !important; }
+  .hashwall-mas-texto {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--crema); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    pointer-events: none;
+  }
+  .hashwall-mas-texto strong {
+    font-family: 'Cormorant Garamond', serif; font-weight: 400;
+    font-size: 46px; letter-spacing: 0; text-transform: none; line-height: 1; margin-bottom: 6px;
+    color: var(--rosa);
+  }
+  @media (max-width: 768px) { .hashwall-mas-texto strong { font-size: 38px; } }
   .hashwall-ver-todas {
     display: inline-flex;
     align-items: center;
@@ -2160,10 +2175,11 @@
   let fotosAprobadas = { previa: [], durante: [], post: [] };
 
   function fotosDe(momento) {
-    if (momento === 'todas') {
-      return [...fotosAprobadas.previa, ...fotosAprobadas.durante, ...fotosAprobadas.post];
-    }
-    return fotosAprobadas[momento];
+    // Más nuevas primero: cada foto nueva entra al final de la planilla (fila más alta)
+    const lista = momento === 'todas'
+      ? [...fotosAprobadas.previa, ...fotosAprobadas.durante, ...fotosAprobadas.post]
+      : (fotosAprobadas[momento] || []);
+    return lista.slice().sort((a, b) => b.fila - a.fila).map(f => f.url);
   }
 
   // ── Lightbox: ver foto en grande, con navegación entre las del mismo set ──
@@ -2223,15 +2239,28 @@
 
   function renderGrid(momento) {
     const grid = document.getElementById('hashwall-grid');
-    const fotos = fotosDe(momento);
-    if (fotos.length > 0) {
-      grid.innerHTML = fotos.slice(0, 8).map(url =>
-        '<div class="hashwall-foto" onclick="abrirLightbox(\'' + url + '\')"><img src="' + miniatura(url, 400) + '" alt="Foto de la boda" loading="lazy"></div>'
-      ).join('');
-    } else {
-      grid.innerHTML = (PLACEHOLDERS[momento] || PLACEHOLDERS.previa)
-        .map(c => '<div class="hashwall-placeholder ' + c + '"></div>').join('');
-    }
+    const LUGARES = 8;
+    const todas = fotosDe(momento);
+    const fotos = todas.slice(0, LUGARES);
+    const extra = todas.length - LUGARES;
+    const colores = PLACEHOLDERS[momento] || PLACEHOLDERS.previa;
+
+    const htmlFotos = fotos.map((url, i) => {
+      if (extra > 0 && i === LUGARES - 1) {
+        return '<div class="hashwall-foto hashwall-mas" onclick="abrirGaleria()" role="button" aria-label="Ver ' + (extra + 1) + ' fotos más">' +
+          '<img src="' + miniatura(url, 400) + '" alt="" loading="lazy">' +
+          '<span class="hashwall-mas-texto"><strong>+' + (extra + 1) + '</strong>fotos más</span></div>';
+      }
+      return '<div class="hashwall-foto" onclick="abrirLightbox(\'' + url + '\')"><img src="' + miniatura(url, 400) + '" alt="Foto de la boda" loading="lazy"></div>';
+    });
+    const htmlRelleno = colores.slice(fotos.length, LUGARES)
+      .map(c => '<div class="hashwall-placeholder ' + c + '"></div>');
+    grid.innerHTML = htmlFotos.concat(htmlRelleno).join('');
+
+    const btnTodas = document.querySelector('.hashwall-ver-todas');
+    if (btnTodas) btnTodas.textContent = todas.length > 0
+      ? 'Ver todas las fotos (' + todas.length + ') →'
+      : 'Ver todas las fotos →';
   }
 
   async function cargarFotos() {
@@ -2240,7 +2269,7 @@
       const fotos = await res.json();
       fotosAprobadas = { previa: [], durante: [], post: [] };
       fotos.filter(f => f.estado === 'aprobada').forEach(f => {
-        if (fotosAprobadas[f.momento]) fotosAprobadas[f.momento].push(f.url);
+        if (fotosAprobadas[f.momento]) fotosAprobadas[f.momento].push({ url: f.url, fila: Number(f.fila) || 0 });
       });
       renderGrid(momentoActual);
     } catch(e) {
@@ -2590,7 +2619,7 @@
     }
     animateRing();
 
-    const hoverables = 'a, button, .wish-item, .hashwall-foto, .hashwall-tab, .vest-toggle button, .hashwall-ver-todas, .hashwall-subir, .transfe-copiar, .subida-momento, .subida-drop, .regalos-cat-btn';
+    const hoverables = 'a, button, .wish-item, .hashwall-foto, .hashwall-mas, .hashwall-tab, .vest-toggle button, .hashwall-ver-todas, .hashwall-subir, .transfe-copiar, .subida-momento, .subida-drop, .regalos-cat-btn';
     document.addEventListener('mouseover', e => {
       if (e.target.closest(hoverables)) ring.classList.add('hover');
     });
